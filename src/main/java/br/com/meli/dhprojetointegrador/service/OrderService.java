@@ -21,6 +21,7 @@ import br.com.meli.dhprojetointegrador.entity.CartProduct;
 import br.com.meli.dhprojetointegrador.entity.Product;
 import br.com.meli.dhprojetointegrador.entity.PurchaseOrder;
 import br.com.meli.dhprojetointegrador.enums.StatusEnum;
+import br.com.meli.dhprojetointegrador.exception.BusinessValidatorException;
 import br.com.meli.dhprojetointegrador.exception.PurchaseOrderNotFoundException;
 import br.com.meli.dhprojetointegrador.repository.BatchStockRepository;
 import br.com.meli.dhprojetointegrador.repository.CartProductRepository;
@@ -179,5 +180,10 @@ public class OrderService {
                 .createdID(purchaseOrder.getId())
                 .totalPrice(totalPrice)
                 .build();
+    }
+    
+    public PurchaseOrder findPurchaseOrderById(Long id) throws BusinessValidatorException {
+    	return purchaseOrderRepository.findById(id)
+    			.orElseThrow(() -> new BusinessValidatorException(String.format("PurchaseOrder of id %d wasn't found", id)));
     }
 }

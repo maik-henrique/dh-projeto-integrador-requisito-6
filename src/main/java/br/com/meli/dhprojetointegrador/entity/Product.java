@@ -44,4 +44,7 @@ public class Product {
     @OneToMany(mappedBy = "products")
     private Set<BatchStock> batchStockList;
 
+    @OneToMany(mappedBy = "product")
+    private Set<PurchaseOrderEvaluation> purchaseOrderEvaluations;
+
 }

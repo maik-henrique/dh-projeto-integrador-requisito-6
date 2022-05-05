@@ -45,6 +45,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -232,7 +234,8 @@ public class ProductControllerTests extends BaseIntegrationControllerTests {
         }
 
         private Product setupProduct(String name, Category category) {
-        Product product = Product.builder().name(name).category(category).batchStockList(Collections.EMPTY_SET).build();
+        Product product = Product.builder().name(name).category(category).batchStockList(Collections.EMPTY_SET)
+                .purchaseOrderEvaluations(Set.of()).build();
 
             productRepository.save(product);
             return product;

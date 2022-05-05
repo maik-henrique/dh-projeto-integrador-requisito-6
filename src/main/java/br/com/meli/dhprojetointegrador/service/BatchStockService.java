@@ -16,7 +16,7 @@ import br.com.meli.dhprojetointegrador.entity.BatchStock;
 import br.com.meli.dhprojetointegrador.enums.CategoryEnum;
 import br.com.meli.dhprojetointegrador.enums.DueDateEnum;
 import br.com.meli.dhprojetointegrador.exception.BusinessValidatorException;
-import br.com.meli.dhprojetointegrador.exception.ResourceNotFound;
+import br.com.meli.dhprojetointegrador.exception.ResourceNotFoundException;
 import br.com.meli.dhprojetointegrador.repository.BatchStockRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -65,13 +65,12 @@ public class BatchStockService {
      *  id do produto alvo da requisição
      * campo base da ordenado do batchStock
      * @return lista de batchStock cuja busca foi bem sucedida
-     * @throws ResourceNotFound caso nenhum produto seja encontrado
+     * @throws ResourceNotFoundException caso nenhum produto seja encontrado
      * @Author: Maik
      * Retorna a lista de batch stocks que possuem o produto específicado e
      * com data de vencimento válida
      */
-    //@Cacheable(value = "findByProductId", key = "#productId")
-    public List<BatchStock> findByProductId(Long productId, String sortBy) throws ResourceNotFound {
+    public List<BatchStock> findByProductId(Long productId, String sortBy) throws ResourceNotFoundException {
         Sort sort = Sort.by(sortBy);
 
         LocalDate minimumDueDate = LocalDate.now(clock).plusWeeks(DueDateEnum.MAX_DUEDATE_WEEKS.getDuedate());
@@ -79,7 +78,7 @@ public class BatchStockService {
         List<BatchStock> batchStock = batchStockRepository.findBatchStockByProducts(productId, minimumDueDate, sort);
 
         if (batchStock.isEmpty()) {
-            throw new ResourceNotFound(String.format("No stock was found for product of id %d and it needs to have a due date of at least %s", productId,
+            throw new ResourceNotFoundException(String.format("No stock was found for product of id %d and it needs to have a due date of at least %s", productId,
                     minimumDueDate.toString()));
         }
 
